@@ -1,0 +1,5 @@
+(library
+ (name pp_binary_ints_tests)
+ (inline_tests)
+ (libraries pp-binary-ints)
+ (preprocess (pps ppx_inline_test)))

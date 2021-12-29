@@ -1,0 +1,6 @@
+{0 pp-binary-ints}
+A library for pretty printing boolean integers.
+
+{1 Library pp-binary-ints}
+The entry point of this library is the module:
+{!module-Pp_binary_ints}.
