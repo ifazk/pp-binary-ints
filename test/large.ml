@@ -344,3 +344,17 @@ let%test "right inherit 8" =
 let%test "right inherit 9" =
   ["10001    ";"0b10001  ";"1_0001   ";"0b1_0001 "] =
   test_width right_inherit_configs 9 0b10001
+
+(** * Large printing *)
+
+let%test "zero inherit 16" =
+  ["0000000000110111";"0b00000000110111";"0_0000_0011_0111";"0b0000_0011_0111"] =
+  test_width zero_inherit_configs 16 0b110111
+
+let%test "left inherit 16" =
+  ["          110111";"        0b110111";"         11_0111";"       0b11_0111"] =
+  test_width left_inherit_configs 16 0b110111
+
+let%test "right inherit 16" =
+  ["110111          ";"0b110111        ";"11_0111         ";"0b11_0111       "] =
+  test_width right_inherit_configs 16 0b110111

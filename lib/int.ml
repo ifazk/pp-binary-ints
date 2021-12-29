@@ -66,8 +66,7 @@ let last_padding ~min_width ~prefix_size rev_bits =
 let print_underscore ~min_width ~count ~separators ~prefix_size rev_bits =
   let open Int in
   separators &&
-  (count > 0) &&
-  (equal 0 (count mod 4)) &&
+  (equal 0 ((count + 1) mod 5)) &&
   (not_at_end ~min_width ~prefix_size rev_bits) &&
   (not (last_padding ~min_width ~prefix_size rev_bits))
 

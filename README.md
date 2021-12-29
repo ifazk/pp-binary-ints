@@ -1,27 +1,33 @@
-{0 pp-binary-ints}
-A library for pretty printing boolean integers.
+# pp-binary-ints
 
-{1 Library pp-binary-ints}
-The entry point of this library is the module:
-{!module-Pp_binary_ints.module-Int}.
+An OCaml library for printing `int`s as unsigned binary integers.
 
-{1 Examples}
+The pretty printers are fairly customizable. The following options are supported.
+
+- Padding with zeros or spaces so that binary integers satisfy a minimum width.
+- Prefixing the integers `0b`.
+- Separating every four bits with `_` (underscore).
+- Choose if zeros should be printed similar to non_zero ints.
+
+# Installation
+Install this library using `opam`.
+
+```
+opam install pp-binary-ints
+```
+
+# Examples
 
 The library provides four main functions.
 
-{ul
-{- {!module-Pp_binary_ints.module-Int.val-to_string} converts ints to strings.}
-{- {!module-Pp_binary_ints.module-Int.val-to_string_with} converts ints to strings, customizing the output with the [~flags] and [~min_width] named arguments.}
-{- {!module-Pp_binary_ints.module-Int.val-pp_int} is a simple {!module-Format} module style pretty printer.}
-{- {!module-Pp_binary_ints.module-Int.val-pp_binary_int} is a customizable {!module-Format} module style pretty printer which takes in named arguments [~flags] and [~min_width].}
-}
+- `Int.to_string` converts ints to strings.
+- `Int.to_string_with ~flags ~min_width` converts ints to strings, customizing the output with `flags` and `min_width`.
+- `Int.pp_int` is a simple `Format` module style pretty printer.
+- `Int.pp_binary_int ~flags ~min_width` is a customizable `Format` module style pretty printer.
 
-The options to customize the outputs can be found in {!module-Pp_binary_ints.Int.Flags}.
+## Basic use
 
-
-{2 Basic use}
-
-{[
+```ocaml
 # #require "pp-binary-ints";;
 # module Pp_Bin = Pp_binary_ints.Int;;
 # Pp_Bin.to_string 0b110111;;
@@ -30,11 +36,11 @@ The options to customize the outputs can be found in {!module-Pp_binary_ints.Int
 - : string = "111111111"
 # Pp_Bin.to_string 1234;;
 - : string = "10011010010"
-]}
+```
 
-{2 Customizing padding and minimum width}
+## Customizing padding and minimum width
 
-{[
+```ocaml
 # #require "pp-binary-ints";;
 # module Pp_Bin = Pp_binary_ints.Int;;
 # (* Zero Padding *);;
@@ -46,11 +52,11 @@ The options to customize the outputs can be found in {!module-Pp_binary_ints.Int
 # (* Space padding on the left is also possible *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Left} ~min_width:13 0b110111;;
 - : string = "       110111"
-]}
+```
 
-{2 Separators and prefixes}
+## Separators and prefixes
 
-{[
+```ocaml
 # (* Separate every 4 digits with _ *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with separators = true } ~min_width:1 0b110111;;
 - : string = "11_0111"
@@ -60,15 +66,15 @@ The options to customize the outputs can be found in {!module-Pp_binary_ints.Int
 # (* Prefix non-zero with separators *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; separators = true } ~min_width:1 0b110111;;
 - : string = "0b11_0111"
-]}
+```
 
-{2 Zero printing behaviour}
+## Zero printing behaviour
 
 We support pretty printing `0` (zero) both how OCaml's `Printf` woould print it,
 as well as printing it similar to how we print non zero integers. The default
 behaviour is to follow `Printf`'s zero printing.
 
-{[
+```ocaml
 # (* Prefix's are not added to zero by default *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true } ~min_width:1 0;;
 - : string = "0"
@@ -85,4 +91,4 @@ behaviour is to follow `Printf`'s zero printing.
 # (* The library is careful not to write "0b_" when prefixing, 'b' is always follewd by a digit *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:7 0;;
 - : string = "0b00000"
-]}
+```
