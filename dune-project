@@ -18,4 +18,4 @@
    "\| unsigned binary integers.
  )
  (tags ("printf" "format" "boolean" "binary"))
- (depends (ocaml (or (and (>= 4.10) (< 4.11)) (and (> 4.11) (< 4.14)))) (ppx_inline_test :with-test)))
+ (depends (ocaml (and (>= 4.10) (< 4.14))) (ppx_inline_test :with-test)))
