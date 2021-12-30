@@ -7,7 +7,7 @@ The pretty printers are fairly customizable. The following options are supported
 - Padding with zeros or spaces so that binary integers satisfy a minimum width.
 - Prefixing the integers `0b`.
 - Separating every four bits with `_` (underscore).
-- Choose if zeros should be printed similar to non_zero ints.
+- Choose if zeros should be printed similar to non-zero ints.
 
 # Installation
 Install this library using `opam`.
