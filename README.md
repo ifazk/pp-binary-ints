@@ -9,6 +9,8 @@ The pretty printers are fairly customizable. The following options are supported
 - Separating every four bits with `_` (underscore).
 - Choose if zeros should be printed similar to non-zero ints.
 
+You can find documentation for the library [here](https://ifazk.github.io/pp-binary-ints/).
+
 # Installation
 Install this library using `opam`.
 
