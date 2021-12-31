@@ -7,7 +7,7 @@
 (maintainers "Ifaz Kabir")
 (source (github ifazk/pp-binary-ints))
 (documentation https://ifazk.github.io/pp-binary-ints/)
-(version 0.1.0)
+(version 0.1.1)
 
 (package
  (name pp-binary-ints)

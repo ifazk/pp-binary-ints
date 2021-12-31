@@ -27,6 +27,15 @@ The library provides four main functions.
 - `Int.pp_int` is a simple `Format` module style pretty printer.
 - `Int.pp_binary_int ~flags ~min_width` is a customizable `Format` module style pretty printer.
 
+There are also versions available for `int32`, `int64`, and `nativeint` in the
+modules
+- `Int32`,
+- `Int64`, and
+- `Nativeint`.
+
+A generic functor to generate binary-int printers is provided in the `MakePP`
+module.
+
 ## Basic use
 
 ```ocaml

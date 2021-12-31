@@ -2,8 +2,7 @@
 A library for pretty printing boolean integers.
 
 {1 Library pp-binary-ints}
-The entry point of this library is the module:
-{!module-Pp_binary_ints.module-Int}.
+The entry point of this library is the module: {!module-Pp_binary_ints}.
 
 {1 Examples}
 
@@ -16,8 +15,15 @@ The library provides four main functions.
 {- {!module-Pp_binary_ints.module-Int.val-pp_binary_int} is a customizable {!module-Format} module style pretty printer which takes in named arguments [~flags] and [~min_width].}
 }
 
-The options to customize the outputs can be found in {!module-Pp_binary_ints.Int.Flags}.
+The options to customize the outputs can be found in {!module-Pp_binary_ints.Flags}.
 
+We also offer versions of these functions for `int32`, `int64`, `nativeint`, in
+the following modules.
+{ul
+    {- {!module-Pp_binary_ints.module-Int32}}
+    {- {!module-Pp_binary_ints.module-Int64}}
+    {- {!module-Pp_binary_ints.module-Nativeint}}
+}
 
 {2 Basic use}
 

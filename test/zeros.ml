@@ -42,6 +42,8 @@ let%test "zero default manual" =
 
 (** ** Zero Padding, OCaml *)
 
+(** OCaml's [Printf] does not prefix zeros *)
+
 let%test "zero ocaml 1" =
   ["0";"0";"0";"0"] =
   test_width zero_ocaml_configs 1 0
@@ -61,6 +63,18 @@ let%test "zero ocaml 4" =
 let%test "zero ocaml 5" =
   ["00000";"00000";"00000";"00000"] =
   test_width zero_ocaml_configs 5 0
+
+let%test "zero ocaml 6" =
+  ["000000";"000000";"0_0000";"0_0000"] =
+  test_width zero_ocaml_configs 6 0
+
+let%test "zero ocaml 16" =
+  ["0000000000000000"
+  ;"0000000000000000"
+  ;"0_0000_0000_0000"
+  ;"0_0000_0000_0000"
+  ] =
+  test_width zero_ocaml_configs 16 0
 
 (** ** Left Padding, OCaml *)
 
