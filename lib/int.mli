@@ -1,3 +1,5 @@
+(** Module for pretty printing values of the type {!type:int}. *)
+
 type t = int
 
 module Flags : sig

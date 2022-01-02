@@ -1,3 +1,5 @@
+(** Module for pretty printing values of the type {!type:int32}. *)
+
 type t = int32
 
 val pp_binary_int :

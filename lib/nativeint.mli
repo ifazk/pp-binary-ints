@@ -1,3 +1,5 @@
+(** Module for pretty printing values of the type {!type:nativeint}. *)
+
 type t = nativeint
 
 val pp_binary_int :

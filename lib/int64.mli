@@ -1,3 +1,5 @@
+(** Module for pretty printing values of the type {!type:int64}. *)
+
 type t = int64
 
 val pp_binary_int :
