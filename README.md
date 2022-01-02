@@ -99,7 +99,7 @@ behaviour is to follow `Printf`'s zero printing.
 # (* All the above options can be combined *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:8 0;;
 - : string = "0b0_0000"
-# (* The library is careful not to write "0b_" when prefixing, 'b' is always follewd by a digit *);;
+# (* The library is careful not to write "0b_" when prefixing, 'b' is always followed by a digit *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:7 0;;
 - : string = "0b00000"
 ```
