@@ -83,7 +83,8 @@ module.
 
 We support pretty printing `0` (zero) both how OCaml's `Printf` woould print it,
 as well as printing it similar to how we print non zero integers. The default
-behaviour is to follow `Printf`'s zero printing.
+behaviour is to follow `Printf`'s zero printing and not print a prefix, but this
+can be changed by setting the `zero_printing` flag to `InheritNonZero`.
 
 ```ocaml
 # (* Prefix's are not added to zero by default *);;
@@ -91,11 +92,6 @@ behaviour is to follow `Printf`'s zero printing.
 - : string = "0"
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:1 0;;
 - : string = "0b0"
-# (* For Zero padding, separators are not used by default *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Zeros; separators = true } ~min_width:6 0;;
-- : string = "000000"
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Zeros; separators = true; zero_printing = InheritNonZero } ~min_width:6 0;;
-- : string = "0_0000"
 # (* All the above options can be combined *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:8 0;;
 - : string = "0b0_0000"
