@@ -24,16 +24,11 @@
 - : string = &quot;0b110111&quot;
 # (* Prefix non-zero with separators *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; separators = true } ~min_width:1 0b110111;;
-- : string = &quot;0b11_0111&quot;</code></pre><h3 id="zero-printing-behaviour"><a href="#zero-printing-behaviour" class="anchor"></a>Zero printing behaviour</h3><p>We support pretty printing `0` (zero) both how OCaml's `Printf` woould print it, as well as printing it similar to how we print non zero integers. The default behaviour is to follow `Printf`'s zero printing.</p><pre><code># (* Prefix's are not added to zero by default *);;
+- : string = &quot;0b11_0111&quot;</code></pre><h3 id="zero-printing-behaviour"><a href="#zero-printing-behaviour" class="anchor"></a>Zero printing behaviour</h3><p>We support pretty printing `0` (zero) both how OCaml's `Printf` woould print it, as well as printing it similar to how we print non zero integers. The default behaviour is to follow <code>Printf</code>'s zero printing and not print a prefix, but this can be changed by setting the <code>zero_printing</code> flag to <code>InheritNonZero</code>.</p><pre><code># (* Prefix's are not added to zero by default *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true } ~min_width:1 0;;
 - : string = &quot;0&quot;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:1 0;;
 - : string = &quot;0b0&quot;
-# (* For Zero padding, separators are not used by default *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Zeros; separators = true } ~min_width:6 0;;
-- : string = &quot;000000&quot;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Zeros; separators = true; zero_printing = InheritNonZero } ~min_width:6 0;;
-- : string = &quot;0_0000&quot;
 # (* All the above options can be combined *);;
 # Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:8 0;;
 - : string = &quot;0b0_0000&quot;
