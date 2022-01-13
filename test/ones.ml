@@ -1,6 +1,6 @@
 open Pp_binary_ints.Int
 
-open Flags
+open Pp_binary_ints.Flags
 
 let configs =
   [ { default with separators = false; prefix_non_zero = false }
@@ -33,11 +33,11 @@ let test_width configs min_width n : string list =
 (** * One printing *)
 
 let%test "one default" =
-  "1" =
+  "0b1" =
   to_string 1
 
 let%test "one default manual" =
-  "1" =
+  "0b1" =
   to_string_with ~flags:default ~min_width:1 1
 
 (** ** Zero Padding, OCaml *)

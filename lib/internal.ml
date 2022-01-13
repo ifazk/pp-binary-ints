@@ -125,11 +125,12 @@ module Make (I : S) (Dec : D) = struct
     let min_width = max (1 + prefix_size) min_width in
     push_chars ~buf ~separators ~prefix_size ~min_width ~count:0 rev_bits
 
-  let rev_buffer ~separators ~prefix ~min_width n : Buffer.t =
+  let rev_buffer ~separators ~prefix ~suffix ~min_width n : Buffer.t =
     let buf = Buffer.create 16 in (* TODO: consider min_width for initial size *)
     let prefix_size = (if prefix then Decorators.prefix_size else 0) in
-    ( Decorators.push_rev_suffix buf
-    ; push_bit_chars ~buf ~separators ~prefix_size ~min_width:(IntUtils.nat_minus min_width Decorators.suffix_size) n
+    let suffix_size = (if suffix then Decorators.suffix_size  else 0) in
+    ( (if suffix then Decorators.push_rev_suffix buf)
+    ; push_bit_chars ~buf ~separators ~prefix_size ~min_width:(IntUtils.nat_minus min_width suffix_size) n
     ; if prefix then
         Decorators.push_rev_prefix buf
     ; buf
@@ -138,10 +139,10 @@ module Make (I : S) (Dec : D) = struct
   (* end of assuming zero padding *)
 
 
-  let pp_binary_int ~flags ~min_width fmt n =
+  let pp_int_with ~flags ~min_width fmt n =
     let open Flags in
     let min_width = max 1 min_width in
-    let {padding; prefix_non_zero; separators; zero_printing} = flags in
+    let {padding; prefix_non_zero; suffix; separators; zero_printing} = flags in
     let buf =
       match padding with
       | Left | Right ->
@@ -150,15 +151,15 @@ module Make (I : S) (Dec : D) = struct
         rev_buffer
           ~separators
           ~prefix
+          ~suffix
           ~min_width
           n
       | Zeros ->
         if (zero_printing = OCaml) && I.equal n I.zero then
-          rev_buffer ~separators ~prefix:false ~min_width I.zero
+          rev_buffer ~separators ~prefix:false ~suffix ~min_width I.zero
         else
           let prefix = prefix_non_zero in
-          let min_width = max min_width (if prefix then 3 else 1) in
-          rev_buffer ~separators ~prefix ~min_width n
+          rev_buffer ~separators ~prefix ~suffix ~min_width n
     in
     let len = Buffer.length buf in
     match padding with
@@ -176,18 +177,20 @@ module Make (I : S) (Dec : D) = struct
       PPUtils.pp_rev_buffer fmt buf
 
 
-  let make_pp_int ?(flags=Flags.default) ?(min_width=1) () =
-    pp_binary_int ~flags ~min_width
+  let make_pp_int ?zero_padding ?left_padding ?separators ?prefix ?suffix ?zero_special ?(min_width=1) () =
+    let flags = Flags.make_flags ?zero_padding ?left_padding ?separators ?prefix ?suffix ?zero_special () in
+    pp_int_with ~flags ~min_width
 
   let pp_int fmt n =
-    pp_binary_int ~flags:(Flags.default) ~min_width:1 fmt n
+    pp_int_with ~flags:(Flags.default) ~min_width:1 fmt n
 
   let to_string n : string =
     Format.asprintf "%a" pp_int n
 
   let to_string_with ~flags ~min_width : I.t -> string =
-    Format.asprintf "%a" (pp_binary_int ~flags ~min_width)
+    Format.asprintf "%a" (pp_int_with ~flags ~min_width)
 
-  let make_to_string ?(flags=Flags.default) ?(min_width=1) () =
+  let make_to_string ?zero_padding ?left_padding ?separators ?prefix ?suffix ?zero_special ?(min_width=1) () =
+    let flags = Flags.make_flags ?zero_padding ?left_padding ?separators ?prefix ?suffix ?zero_special () in
     to_string_with ~flags ~min_width
 end

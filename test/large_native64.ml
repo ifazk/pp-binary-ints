@@ -24,11 +24,11 @@ let test_width configs min_width n : string list =
 (** * Five printing *)
 
 let%test "one default" [@tags "64-bits-only"] =
-  "101n" [@tags "64-bits-only"] =
+  "0b101n" =
   to_string 0b101n
 
 let%test "one default manual" [@tags "64-bits-only"] =
-  "101n" [@tags "64-bits-only"] =
+  "0b101n" =
   to_string_with ~flags:default ~min_width:1 0b101n
 
 (** ** Zero Padding, Inherit *)
@@ -149,11 +149,11 @@ let%test "right inherit 7" [@tags "64-bits-only"] =
 (** * Eight printing *)
 
 let%test "one default" [@tags "64-bits-only"] =
-  "1000n" [@tags "64-bits-only"] =
+  "0b1000n" =
   to_string 0b1000n
 
 let%test "one default manual" [@tags "64-bits-only"] =
-  "1000n" [@tags "64-bits-only"] =
+  "0b1000n" =
   to_string_with ~flags:default ~min_width:1 0b1000n
 
 (** ** Zero Padding, Inherit *)
@@ -265,11 +265,11 @@ let%test "right inherit 8" [@tags "64-bits-only"] =
 (** * Seventeen printing *)
 
 let%test "one default" [@tags "64-bits-only"] =
-  "10001n" [@tags "64-bits-only"] =
+  "0b1_0001n" =
   to_string 0b10001n
 
 let%test "one default manual" [@tags "64-bits-only"] =
-  "10001n" [@tags "64-bits-only"] =
+  "0b1_0001n" =
   to_string_with ~flags:default ~min_width:1 0b10001n
 
 (** ** Zero Padding, Inherit *)

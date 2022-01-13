@@ -24,11 +24,11 @@ let test_width configs min_width n : string list =
 (** * Five printing *)
 
 let%test "one default" =
-  "101l" =
+  "0b101l" =
   to_string 0b101l
 
 let%test "one default manual" =
-  "101l" =
+  "0b101l" =
   to_string_with ~flags:default ~min_width:1 0b101l
 
 (** ** Zero Padding, Inherit *)
@@ -149,11 +149,11 @@ let%test "right inherit 7" =
 (** * Eight printing *)
 
 let%test "one default" =
-  "1000l" =
+  "0b1000l" =
   to_string 0b1000l
 
 let%test "one default manual" =
-  "1000l" =
+  "0b1000l" =
   to_string_with ~flags:default ~min_width:1 0b1000l
 
 (** ** Zero Padding, Inherit *)
@@ -265,11 +265,11 @@ let%test "right inherit 8" =
 (** * Seventeen printing *)
 
 let%test "one default" =
-  "10001l" =
+  "0b1_0001l" =
   to_string 0b10001l
 
 let%test "one default manual" =
-  "10001l" =
+  "0b1_0001l" =
   to_string_with ~flags:default ~min_width:1 0b10001l
 
 (** ** Zero Padding, Inherit *)

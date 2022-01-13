@@ -23,9 +23,11 @@ opam install pp-binary-ints
 The library provides four main functions.
 
 - `Int.to_string` converts ints to strings.
-- `Int.to_string_with ~flags ~min_width` converts ints to strings, customizing the output with `flags` and `min_width`.
+- `Int.make_to_string` converts ints to strings, customizing the output with the optional arguments.
 - `Int.pp_int` is a simple `Format` module style pretty printer.
-- `Int.pp_binary_int ~flags ~min_width` is a customizable `Format` module style pretty printer.
+- `Int.make_pp_int` is a customizable `Format` module style pretty printer with the customization controlled by the optional arguments.
+- `Int.to_string_with` is a lower level function converts ints to strings, customizing the output with the `~flags` and `~min_width` named arguments.
+- `Int.pp_int_with` is a lower level customizable `Format` module style pretty printer which takes in named arguments `~flags` and `~min_width`.
 
 There are also versions available for `int32`, `int64`, and `nativeint` in the
 modules
@@ -36,17 +38,19 @@ modules
 A generic functor to generate binary-int printers is provided in the `MakePP`
 module.
 
+The following demonstrates using the library in a toplevel/REPL.
+
 ## Basic use
 
 ```ocaml
 # #require "pp-binary-ints";;
 # module Pp_Bin = Pp_binary_ints.Int;;
 # Pp_Bin.to_string 0b110111;;
-- : string = "110111"
+- : string = "0b11_0111"
 # Pp_Bin.to_string 0o777;;
-- : string = "111111111"
+string = "0b1_1111_1111"
 # Pp_Bin.to_string 1234;;
-- : string = "10011010010"
+- : string = "0b100_1101_0010"
 ```
 
 ## Customizing padding and minimum width
@@ -54,48 +58,67 @@ module.
 ```ocaml
 # #require "pp-binary-ints";;
 # module Pp_Bin = Pp_binary_ints.Int;;
-# (* Zero Padding *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Zeros } ~min_width:13 0b110111;;
-- : string = "0000000110111"
-# (* Default is space padding on the right *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.default ~min_width:13 0b110111;;
-- : string = "110111       "
+# (* Space Padding *);;
+# Pp_Bin.make_to_string ~zero_padding:false ~min_width:13 () 0b110111;;
+- : string = "0b11_0111    "
 # (* Space padding on the left is also possible *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with padding = Left} ~min_width:13 0b110111;;
-- : string = "       110111"
+# Pp_Bin.make_to_string ~zero_padding:false ~left_padding:true ~min_width:13 () 0b110111;;
+- : string = "    0b11_0111"
 ```
 
 ## Separators and prefixes
 
 ```ocaml
-# (* Separate every 4 digits with _ *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with separators = true } ~min_width:1 0b110111;;
-- : string = "11_0111"
-# (* Prefix non-zero *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true } ~min_width:1 0b110111;;
+# (* Turn off _ separators *);;
+# Pp_Bin.make_to_string ~separators:false ~min_width:1 () 0b110111;;
 - : string = "0b110111"
-# (* Prefix non-zero with separators *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; separators = true } ~min_width:1 0b110111;;
-- : string = "0b11_0111"
+# (* Turn off prefixes *);;
+# Pp_Bin.make_to_string ~prefix:false ~min_width:1 () 0b110111;;
+- : string = "11_0111"
+# (* Turn off both separatorns and prefixes *);;
+# Pp_Bin.make_to_string ~separators:false ~prefix:false ~min_width:1 () 0b110111;;
+- : string = "110111"
 ```
 
 ## Zero printing behaviour
 
-We support pretty printing `0` (zero) both how OCaml's `Printf` woould print it,
-as well as printing it similar to how we print non zero integers. The default
-behaviour is to follow `Printf`'s zero printing and not print a prefix, but this
-can be changed by setting the `zero_printing` flag to `InheritNonZero`.
+You can ask the library to treat `0` (zero) specially and not add a prefix to
+it. While it won't add a prefix to it, padding will still be added.
 
 ```ocaml
-# (* Prefix's are not added to zero by default *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true } ~min_width:1 0;;
+# (* Don't prefix zero *);;
+# Pp_Bin.make_to_string ~zero_special:true ~min_width:1 () 0;;
 - : string = "0"
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ default with prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:1 0;;
-- : string = "0b0"
-# (* All the above options can be combined *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:8 0;;
-- : string = "0b0_0000"
-# (* The library is careful not to write "0b_" when prefixing, 'b' is always followed by a digit *);;
-# Pp_Bin.to_string_with ~flags:Pp_Bin.Flags.{ padding = Zeros; separators = true; prefix_non_zero = true; zero_printing = InheritNonZero } ~min_width:7 0;;
-- : string = "0b00000"
+# Pp_Bin.make_to_string ~zero_special:true ~min_width:1 () 0b110111;;
+- : string = "0b11_0111"
+(* Zero Padding still adds zeros to fill up the sapce *)
+# Pp_Bin.make_to_string ~zero_special:true ~min_width:9 () 0;;
+- : string = "0000_0000"
+# Pp_Bin.make_to_string ~zero_special:true ~min_width:9 () 0b110111;;
+- : string = "0b11_0111"
+```
+
+# Printing Binary Ints in the REPL
+
+```ocaml
+# #use "topfind";;
+# #require "pp-binary-ints";;
+# #install_printer Pp_binary_ints.Int.pp_int;;
+# 0;;
+- : int = 0b0
+# 7;;
+- : int = 0b111
+```
+
+
+You can also add the following to your `.ocamlinit` file so that integers are
+always printed using this library.
+
+```ocaml
+#use "topfind";;
+#require "pp-binary-ints";;
+#install_printer Pp_binary_ints.Int.pp_int;;
+#install_printer Pp_binary_ints.Int32.pp_int;;
+#install_printer Pp_binary_ints.Int64.pp_int;;
+#install_printer Pp_binary_ints.Nativeint.pp_int;;
 ```

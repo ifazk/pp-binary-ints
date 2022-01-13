@@ -33,11 +33,11 @@ let test_width configs min_width n : string list =
 (** * One printing *)
 
 let%test "one default" =
-  "1L" =
+  "0b1L" =
   to_string 1L
 
 let%test "one default manual" =
-  "1L" =
+  "0b1L" =
   to_string_with ~flags:default ~min_width:1 1L
 
 (** ** Zero Padding, OCaml *)

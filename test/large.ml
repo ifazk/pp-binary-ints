@@ -1,6 +1,6 @@
 open Pp_binary_ints.Int
 
-open Flags
+open Pp_binary_ints.Flags
 
 let configs =
   [ { default with separators = false; prefix_non_zero = false }
@@ -24,11 +24,11 @@ let test_width configs min_width n : string list =
 (** * Five printing *)
 
 let%test "one default" =
-  "101" =
+  "0b101" =
   to_string 0b101
 
 let%test "one default manual" =
-  "101" =
+  "0b101" =
   to_string_with ~flags:default ~min_width:1 0b101
 
 (** ** Zero Padding, Inherit *)
@@ -120,11 +120,11 @@ let%test "right inherit 6" =
 (** * Eight printing *)
 
 let%test "one default" =
-  "1000" =
+  "0b1000" =
   to_string 0b1000
 
 let%test "one default manual" =
-  "1000" =
+  "0b1000" =
   to_string_with ~flags:default ~min_width:1 0b1000
 
 (** ** Zero Padding, Inherit *)
@@ -224,11 +224,11 @@ let%test "right inherit 7" =
 (** * Seventeen printing *)
 
 let%test "one default" =
-  "10001" =
+  "0b1_0001" =
   to_string 0b10001
 
 let%test "one default manual" =
-  "10001" =
+  "0b1_0001" =
   to_string_with ~flags:default ~min_width:1 0b10001
 
 (** ** Zero Padding, Inherit *)
